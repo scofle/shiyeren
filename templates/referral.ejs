@@ -1,0 +1,71 @@
+﻿<%- include('header') %>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 mb-3">
+            <div class="card-body text-center p-4">
+                <div class="display-1 text-success mb-2"><i class="bi bi-megaphone"></i></div>
+                <h4>推广中心</h4>
+                <p class="text-muted small">邀请好友充值会员，满3人返还会员费!</p>
+                <div class="bg-light rounded p-3 mb-3">
+                    <div class="fs-1 fw-bold text-success"><%= refCount %>/3</div>
+                    <div class="text-muted small">有效推广</div>
+                    <div class="progress mt-2" style="height: 8px;">
+                        <div class="progress-bar bg-success" style="width: <%= Math.min(100, refCount/3*100) %>%"></div>
+                    </div>
+                </div>
+                <% if (refCount >= 3 && user.is_member) { %>
+                    <div class="alert alert-success mb-0">
+                        <i class="bi bi-trophy"></i> 已达目标! 会员费已返还!
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 mb-3">
+            <div class="card-body">
+                <h5><i class="bi bi-link-45deg"></i> 我的推广链接</h5>
+                <p class="text-muted small">将以下链接分享给好友，好友注册并充值会员即算有效推广</p>
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="refLink" value="<%= refUrl %>" readonly>
+                    <button class="btn btn-primary" onclick="navigator.clipboard.writeText(document.getElementById('refLink').value);alert('复制成功!')">
+                        <i class="bi bi-clipboard"></i> 复制
+                    </button>
+                </div>
+                <div class="alert alert-info small mb-0">
+                    <i class="bi bi-info-circle"></i> 规则: 每邀请1位好友通过您的链接注册并充值会员计为1人，满3人返还会员费(10天有效)
+                </div>
+            </div>
+        </div>
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="bi bi-people"></i> 推广记录</h5>
+            </div>
+            <div class="card-body p-0">
+                <% if (referrals.length > 0) { %>
+                    <div class="list-group list-group-flush">
+                        <% referrals.forEach(function(r) { %>
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div><%= r.username %></div>
+                                    <small class="text-muted"><%= r.registered_date %></small>
+                                </div>
+                                <% if (r.membership_fee_paid) { %>
+                                    <span class="badge bg-success">已付费</span>
+                                <% } else { %>
+                                    <span class="badge bg-secondary">未付费</span>
+                                <% } %>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-people fs-1 d-block mb-2"></i>
+                        暂无推广记录
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer') %>

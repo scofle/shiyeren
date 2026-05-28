@@ -1,0 +1,30 @@
+﻿<%- include('header') %>
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <h4 class="text-center mb-4"><i class="bi bi-box-arrow-in-right"></i> 用户登录</h4>
+                <% if (typeof error !== 'undefined' && error) { %>
+                    <div class="alert alert-danger"><%= error %></div>
+                <% } %>
+                <form method="POST" action="/login">
+                    <input type="hidden" name="redirect" value="<%= typeof redirect !== 'undefined' ? redirect : '/' %>">
+                    <div class="mb-3">
+                        <label class="form-label">用户名</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">密码</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">登录</button>
+                </form>
+                <div class="text-center mt-3">
+                    <span class="text-muted">还没有账号? </span>
+                    <a href="/register">立即注册</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer') %>
