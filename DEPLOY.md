@@ -1,71 +1,71 @@
-﻿# 破薪阁 — OSS 静态托管部署清单
+﻿# 破薪阁 — 阿里云 OSS 自动部署指南
 
-## 一、部署前代码检查
+## 架构概览
 
-- [x] 所有资源路径已改为相对路径（CSS/JS/页面间跳转均使用 `./` 或 `../`）
-- [x] 首页文件命名为 `index.html`
-- [x] 无动态路由，无需 SPA 降级处理
-- [x] 无后端依赖（无 API 调用、无表单提交到服务端）
-- [x] 外部链接（腾讯文档、百度贴吧）保持不变，均为新标签页打开
+```
+你在网页后台改内容
+        ↓
+Decap CMS 自动提交到 GitHub
+        ↓
+GitHub Actions 自动同步到阿里云 OSS
+        ↓
+网站更新完成（全自动，无需手动上传）
+```
 
-## 二、阿里云 OSS 配置
+## 一、你需要准备的 3 个信息
 
-### 1. 创建 Bucket
-- 区域：选择离用户最近的（如杭州）
+| 信息 | 在哪里找 | 示例 |
+|------|---------|------|
+| OSS 地域节点 | 阿里云 OSS 控制台 → Bucket 概览 → 外网访问 | `oss-cn-hangzhou.aliyuncs.com` |
+| Bucket 名称 | 同上 | `my-bucket` |
+| AccessKey | 阿里云 RAM 访问控制 → 用户 → 创建 AccessKey | `LTAI5t...` |
+
+## 二、配置步骤（4 步）
+
+### 1. 阿里云：创建 AccessKey
+- 登录 [RAM 访问控制](https://ram.console.aliyun.com/users)
+- 创建用户 → 勾选"OpenAPI 调用访问"
+- 权限策略选 `AliyunOSSFullAccess`
+- 保存 AccessKey ID + Secret
+
+### 2. GitHub：添加 Secrets
+- 打开仓库 → Settings → Secrets and variables → Actions
+- 添加两个 Repository secrets：
+
+| Name | Value |
+|------|-------|
+| `ALIBABA_CLOUD_ACCESS_KEY_ID` | 你的 AccessKey ID |
+| `ALIBABA_CLOUD_ACCESS_KEY_SECRET` | 你的 AccessKey Secret |
+
+### 3. 修改部署脚本
+- 打开 `.github/workflows/deploy.yml`
+- 把 `oss-cn-REGION.aliyuncs.com` 换成你的地域节点
+- 把 `YOUR-BUCKET-NAME` 换成你的 Bucket 名称
+- 提交这个修改
+
+### 4. 修改 CMS 域名
+- 打开 `admin/config.yml`
+- 把 `YOUR_DOMAIN` 换成你的 OSS 域名（如 `my-bucket.oss-cn-hangzhou.aliyuncs.com`）
+- 提交这个修改
+
+## 三、OSS Bucket 设置
+
 - 读写权限：**公共读**
-- 版本控制：不需要（可选）
+- 静态页面默认首页：`index.html`
+- 静态页面默认 404：`404.html`
+- 如果绑定自定义域名，在 CDN 中配置 HTTPS 证书
 
-### 2. 开启静态网站托管
-- OSS 控制台 → Bucket → 基础设置 → 静态页面
-- 默认首页：`index.html`
-- 默认 404 页：`404.html`
+## 四、验证
 
-### 3. 绑定自定义域名（可选但推荐）
-- OSS 控制台 → Bucket → 域名管理 → 绑定域名
-- 如果启用 HTTPS，需在 CDN/全站加速中配置 SSL 证书
-- DNS 添加 CNAME 记录指向 OSS 域名
+1. 推送代码后，GitHub 的 Actions 标签页会自动运行部署
+2. 部署成功后访问 OSS 域名确认网站正常
+3. 访问 `/admin/` 用 GitHub 账号登录后台
 
-### 4. 上传文件
-- 将整个 `shiyeren/` 目录内容上传到 Bucket 根目录
-- 确保上传时保留目录结构（css/、js/、content/ 等）
+## 五、成本估算
 
-## 三、CMS 后台配置
-
-使用 Decap CMS 需要完成以下配置：
-
-1. 在 GitHub 创建 OAuth App（如已创建则跳过）
-   - Settings → Developer settings → OAuth Apps
-   - Homepage URL：你的 OSS 域名
-   - Callback URL：`https://api.decapcms.org/auth/github/callback`
-
-2. 修改 `admin/config.yml`
-   - 将 `YOUR_DOMAIN` 替换为你的实际域名
-   - 如果使用 OSS 默认域名，填完整地址
-
-3. 访问后台：`你的域名/admin/`
-
-## 四、成本估算（阿里云 OSS）
-
-| 项目 | 预估月费 |
-|------|---------|
-| OSS 存储（<1GB） | ~0.12 元 |
-| OSS 外网流量（<5GB/月） | ~2.5 元 |
-| 自定义域名 + HTTPS | 免费（使用 CDN 加速） |
+| 项目 | 月费 |
+|------|------|
+| OSS 存储 | ~0.12 元 |
+| OSS 流量（<5GB） | ~2.5 元 |
+| GitHub Actions | 免费（公开仓库无限） |
 | **合计** | **<5 元/月** |
-
-## 五、文件结构
-
-```
-Bucket 根目录/
-├── index.html          # 首页（必须）
-├── 404.html            # 错误页
-├── admin/              # CMS 后台
-├── books/              # 网络书库
-├── projects/           # 搞钱案例
-├── resources/          # 资料库
-├── forum/              # 论坛入口
-├── content/            # JSON 数据（CMS 读写）
-├── css/                # 样式
-├── js/                 # 脚本
-└── assets/             # 上传的图片等资源
-```

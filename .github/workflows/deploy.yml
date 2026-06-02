@@ -1,0 +1,37 @@
+﻿# ============================================================
+#  破薪阁 — GitHub Actions 自动部署到阿里云 OSS
+#  每次推送 main 分支时自动同步文件
+# ============================================================
+
+name: 部署到阿里云 OSS
+
+on:
+  push:
+    branches: [ "main" ]
+  # 允许手动触发
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 ossutil
+        uses: manyuanrong/setup-ossutil@v3
+        with:
+          # ↓ 替换为你的 OSS 地域节点
+          # 例如 oss-cn-hangzhou.aliyuncs.com
+          endpoint: oss-cn-REGION.aliyuncs.com
+          access-key-id: ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_ID }}
+          access-key-secret: ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_SECRET }}
+
+      - name: 同步文件到 OSS
+        run: |
+          ossutil sync . oss://YOUR-BUCKET-NAME \
+            --delete \
+            --exclude ".git/*" \
+            --exclude ".github/*" \
+            --exclude "DEPLOY.md" \
+            --exclude ".gitignore"
