@@ -1,21 +1,25 @@
 ﻿# ============================================================
 #  破薪阁 — Decap CMS 配置
-#  后台地址：https://shiyeren.top/admin/
+#  后台地址：/admin/
+#
+#  【OSS 部署注意】将下方 base_url / site_url / display_url
+#   中的 YOUR_DOMAIN 替换为你的实际域名（如 example.com）
+#   如果使用 OSS 默认域名，填完整地址（如 http://bucket.oss-cn-hangzhou.aliyuncs.com）
 # ============================================================
 
 backend:
   name: github
   repo: scofle/shiyeren
   branch: main
-  base_url: https://shiyeren.top
+  base_url: https://YOUR_DOMAIN  # ← 替换为你的域名
 
 # 上传图片存放位置
 media_folder: "assets/images"
 public_folder: "/assets/images"
 
-# 站点地址
-site_url: https://shiyeren.top
-display_url: https://shiyeren.top
+# 站点地址（← 替换为你的域名）
+site_url: https://YOUR_DOMAIN
+display_url: https://YOUR_DOMAIN
 
 # 中文界面
 locale: "zh_Hans"
