@@ -1,0 +1,62 @@
+﻿<%- include('header') %>
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><%= product ? '编辑商品' : '新增商品' %></h5>
+            </div>
+            <div class="card-body">
+                <% if (typeof error !== 'undefined' && error) { %><div class="alert alert-danger"><%= error %></div><% } %>
+                <form method="POST" action="<%= product ? '/admin/products/edit/' + product.id : '/admin/products/new' %>">
+                    <div class="mb-3">
+                        <label class="form-label">标题 *</label>
+                        <input type="text" name="title" class="form-control" value="<%= product ? product.title : '' %>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">描述</label>
+                        <textarea name="description" class="form-control" rows="3"><%= product ? product.description : '' %></textarea>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">分类</label>
+                            <select name="category_id" class="form-select">
+                                <% categories.forEach(function(c) { %>
+                                    <option value="<%= c.id %>" <%= product && String(product.category_id) === String(c.id) ? 'selected' : '' %>><%= c.name %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">文件大小</label>
+                            <input type="text" name="file_size" class="form-control" value="<%= product ? product.file_size : '' %>" placeholder="如: 50MB">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">文件类型</label>
+                            <input type="text" name="file_type" class="form-control" value="<%= product ? product.file_type : '' %>" placeholder="如: PDF">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">下载链接 * (网盘链接)</label>
+                        <input type="url" name="download_link" class="form-control" value="<%= product ? product.download_link : '' %>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">封面图URL (可选)</label>
+                        <input type="url" name="cover_image_url" class="form-control" value="<%= product ? product.cover_image_url : '' %>">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">标签 (用逗号分隔)</label>
+                        <input type="text" name="tags" class="form-control" value="<%= product ? product.tags : '' %>" placeholder="如: 入门,教程,2024">
+                    </div>
+                    <% if (product) { %>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" name="is_active" class="form-check-input" id="isActive" <%= product.is_active ? 'checked' : '' %>>
+                            <label class="form-check-label" for="isActive">上架</label>
+                        </div>
+                    <% } %>
+                    <button type="submit" class="btn btn-primary"><%= product ? '保存修改' : '创建商品' %></button>
+                    <a href="/admin/products" class="btn btn-secondary">取消</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer') %>

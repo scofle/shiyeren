@@ -1,0 +1,57 @@
+﻿<%- include('header') %>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <% if (typeof alreadyMember !== 'undefined' && alreadyMember) { %>
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body text-center p-5">
+                    <div class="display-1 text-warning mb-3"><i class="bi bi-gem"></i></div>
+                    <h3 class="fw-bold">您已是会员!</h3>
+                    <p class="text-muted">畅享所有资料免费下载</p>
+                    <a href="/products" class="btn btn-primary btn-lg mt-2"><i class="bi bi-collection"></i> 浏览资料</a>
+                    <a href="/referral" class="btn btn-outline-primary btn-lg mt-2 ms-2"><i class="bi bi-share"></i> 推广返现</a>
+                </div>
+            </div>
+            <% if (typeof refCount !== 'undefined' && refCount < 3) { %>
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5><i class="bi bi-megaphone"></i> 推广返现</h5>
+                        <p class="text-muted small">邀请好友充值会员，满3人返还￥10会员费! 当前进度: <%= refCount %>/3</p>
+                        <div class="progress mb-3" style="height: 20px;">
+                            <div class="progress-bar progress-bar-striped bg-success" style="width: <%= (refCount/3*100) %>%"><%= refCount %>/3</div>
+                        </div>
+                        <a href="/referral" class="btn btn-success btn-sm">立即推广 <i class="bi bi-box-arrow-up-right"></i></a>
+                    </div>
+                </div>
+            <% } else if (typeof refCount !== 'undefined' && refCount >= 3) { %>
+                <div class="alert alert-success">
+                    <i class="bi bi-check-circle"></i> 恭喜! 您已成功邀请3位好友，会员费已返还至您的余额!
+                </div>
+            <% } %>
+        <% } else { %>
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-5 text-center">
+                    <div class="display-1 text-warning mb-3"><i class="bi bi-gem"></i></div>
+                    <h3 class="fw-bold">开通会员</h3>
+                    <p class="text-muted mb-4">仅需 <span class="fs-2 fw-bold text-warning">￥10</span></p>
+                    <div class="text-start bg-light rounded p-4 mb-4">
+                        <h6>会员权益:</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle text-success"></i> 所有资料免费下载</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success"></i> 无限次下载</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success"></i> 新资料优先获取</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success"></i> 邀请3人返还会员费</li>
+                            <li><i class="bi bi-check-circle text-success"></i> 10天内拉3人充值全额返现</li>
+                        </ul>
+                    </div>
+                    <form method="POST" action="/membership/pay">
+                        <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold">
+                            <i class="bi bi-credit-card"></i> 立即支付 ￥10
+                        </button>
+                    </form>
+                    <p class="text-muted small mt-2">本地测试模式，点击即自动支付成功</p>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
+<%- include('footer') %>
