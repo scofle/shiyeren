@@ -1,0 +1,78 @@
+﻿# ============================================================
+#  破薪阁 — Decap CMS 配置
+#  后台地址：https://shiyeren.top/admin/
+# ============================================================
+
+backend:
+  name: github
+  repo: scofle/shiyeren
+  branch: main
+  base_url: https://shiyeren.top
+
+# 上传图片存放位置
+media_folder: "assets/images"
+public_folder: "/assets/images"
+
+# 站点地址
+site_url: https://shiyeren.top
+display_url: https://shiyeren.top
+
+# 中文界面
+locale: "zh_Hans"
+
+# ========== 内容集合 ==========
+collections:
+
+  # --- 搞钱案例 ---
+  - name: "cases"
+    label: "搞钱案例"
+    label_singular: "案例"
+    folder: "content/cases"
+    create: true
+    slug: "{{slug}}"
+    extension: json
+    format: json
+    editor:
+      preview: false
+    fields:
+      - {label: "标题", name: "title", widget: "string"}
+      - {label: "分类", name: "category", widget: "select", options: ["副业搞钱", "技能变现", "线上项目"]}
+      - {label: "简介", name: "summary", widget: "text"}
+      - {label: "正文", name: "body", widget: "markdown"}
+      - {label: "排序", name: "order", widget: "number", value_type: "int", default: 0, required: false}
+
+  # --- 资料库 ---
+  - name: "resources"
+    label: "资料库"
+    label_singular: "资料"
+    folder: "content/resources"
+    create: true
+    slug: "{{slug}}"
+    extension: json
+    format: json
+    editor:
+      preview: false
+    fields:
+      - {label: "名称", name: "title", widget: "string"}
+      - {label: "分类", name: "category", widget: "select", options: ["简历模板", "面试题库", "技能教程", "副业工具", "考证资料"]}
+      - {label: "简介", name: "description", widget: "text"}
+      - {label: "下载链接", name: "link", widget: "string"}
+      - {label: "排序", name: "order", widget: "number", value_type: "int", default: 0, required: false}
+
+  # --- 网站全局设置 ---
+  - name: "settings"
+    label: "网站设置"
+    editor:
+      preview: false
+    files:
+      - name: "hero"
+        label: "首页英雄区"
+        file: "content/settings/hero.json"
+        fields:
+          - {label: "标题行1", name: "line1", widget: "string"}
+          - {label: "标题行2", name: "line2", widget: "string"}
+          - {label: "副标题", name: "subtitle", widget: "text"}
+          - label: "温暖语句库"
+            name: "quotes"
+            widget: "list"
+            field: {label: "语句", name: "text", widget: "string"}

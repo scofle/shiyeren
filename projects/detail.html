@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>搞钱案例 — 破薪阁</title>
-  <meta name="description" content="真实搞钱案例分享，副业思路实操记录。">
+  <title>案例详情 — 破薪阁</title>
+  <meta name="description" content="搞钱案例详细内容。">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -20,7 +20,7 @@
       </button>
       <ul class="nav-links">
         <li><a href="../index.html">首页</a></li>
-        <li><a href="index.html" class="active">搞钱案例</a></li>
+        <li><a href="index.html">搞钱案例</a></li>
         <li><a href="../resources/index.html">资料库</a></li>
         <li><a href="../books/index.html">网络书库</a></li>
         <li><a href="../forum/index.html">论坛</a></li>
@@ -30,30 +30,11 @@
 
   <main class="main-content">
 
-    <!-- ========== 页面头部 ========== -->
-    <section class="page-header">
-      <div class="container">
-        <h1>搞钱案例</h1>
-        <p>真实可落地的小本搞钱思路，总有一条路适合你</p>
-      </div>
-    </section>
-
-    <!-- ========== 分类筛选 ========== -->
-    <section class="container">
-      <div class="category-filter">
-        <button class="active" data-category="all">全部</button>
-        <button data-category="副业搞钱">副业搞钱</button>
-        <button data-category="技能变现">技能变现</button>
-        <button data-category="线上项目">线上项目</button>
-      </div>
-    </section>
-
-    <!-- ========== 案例列表（动态加载） ========== -->
-    <section class="container">
-      <div class="card-grid" id="cases-list">
-        <!-- 由 content-loader.js 动态渲染 -->
-      </div>
-    </section>
+    <!-- ========== 文章详情（动态加载） ========== -->
+    <article class="article-detail" id="case-detail">
+      <a href="index.html" class="back-link">&larr; 返回案例列表</a>
+      <p>加载中...</p>
+    </article>
 
   </main>
 
@@ -67,10 +48,7 @@
   <script src="../js/main.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      ContentLoader.initProjects().then(() => {
-        // 重新绑定筛选事件（因为 DOM 已更新）
-        initCategoryFilter();
-      });
+      ContentLoader.initCaseDetail();
     });
   </script>
 </body>

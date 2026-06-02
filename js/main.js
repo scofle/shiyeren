@@ -1,17 +1,21 @@
 ﻿/* ============================================================
    破薪阁 — 主脚本
-   功能：今日回声随机语句 / 汉堡菜单 / 分类筛选
+   功能：汉堡菜单 / 分类筛选（适配动态加载内容）
+   注意：今日回声由 content-loader.js 接管，此处仅作降级
    ============================================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
   initHamburger();
-  initEcho();
-  initCategoryFilter();
-  initResourceTabs();
+  // 延迟执行，等 content-loader 先完成
+  setTimeout(() => {
+    initEchoFallback();
+    initCategoryFilter();
+    initResourceTabs();
+  }, 100);
 });
 
-/* --- 100 条温暖语句库 --- */
-const QUOTES = [
+/* --- 100 条温暖语句库（降级备用，正式数据在 content/settings/hero.json） --- */
+const QUOTES_FALLBACK = [
   "你愿意把这句话说出来，已经是在照顾自己了。",
   "现在的不确定，不是你做错了什么。",
   "允许自己暂时停下来。",
@@ -125,7 +129,6 @@ function initHamburger() {
     document.body.style.overflow = nav.classList.contains("open") ? "hidden" : "";
   });
 
-  // 点击菜单项自动关闭
   nav.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
       btn.classList.remove("active");
@@ -135,12 +138,14 @@ function initHamburger() {
   });
 }
 
-/* --- 今日回声 --- */
-function initEcho() {
+/* --- 今日回声（降级） --- */
+function initEchoFallback() {
   const el = document.getElementById("echo-text");
   if (!el) return;
-  const idx = Math.floor(Math.random() * QUOTES.length);
-  el.textContent = QUOTES[idx];
+  // 如果 content-loader 已经填充了内容，不覆盖
+  if (el.textContent && el.textContent.trim()) return;
+  const idx = Math.floor(Math.random() * QUOTES_FALLBACK.length);
+  el.textContent = QUOTES_FALLBACK[idx];
 }
 
 /* --- 搞钱案例分类筛选 --- */
