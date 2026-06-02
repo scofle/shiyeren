@@ -1,0 +1,530 @@
+﻿/* ============================================================
+   破薪阁 — 全局样式表
+   主色调：暖米色 #FDF8F0 / 柔和棕 #D4A574 / 深灰 #3E3E3E
+   移动优先，响应式布局
+   ============================================================ */
+
+/* --- 基础重置 --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  color: #3e3e3e;
+  background-color: #fdf8f0;
+  line-height: 1.7;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* --- 导航栏 --- */
+.navbar {
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.logo {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #3e3e3e;
+  letter-spacing: 1px;
+}
+
+.logo .logo-icon {
+  color: #d4a574;
+  margin-right: 4px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 24px;
+}
+
+.nav-links a {
+  font-size: 0.95rem;
+  color: #555;
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: #d4a574;
+  border-bottom-color: #d4a574;
+}
+
+/* 汉堡菜单按钮 */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 101;
+}
+
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #3e3e3e;
+  border-radius: 2px;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* --- 容器 --- */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* --- 主内容区 --- */
+.main-content {
+  flex: 1;
+}
+
+/* --- 英雄区 --- */
+.hero {
+  text-align: center;
+  padding: 64px 20px 48px;
+}
+
+.hero h1 {
+  font-size: 2rem;
+  color: #3e3e3e;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.hero .subtitle {
+  font-size: 1.1rem;
+  color: #7a7a7a;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* --- 区块标题 --- */
+.section-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #3e3e3e;
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  text-align: center;
+  color: #888;
+  font-size: 0.95rem;
+  margin-bottom: 32px;
+}
+
+/* --- 卡片 --- */
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* --- 卡片网格 --- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  padding: 0 0 48px;
+}
+
+/* --- 搞钱案例卡片 --- */
+.case-card .case-tag {
+  display: inline-block;
+  background: #fdf3e4;
+  color: #d4a574;
+  font-size: 0.8rem;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.case-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.case-card p {
+  font-size: 0.9rem;
+  color: #777;
+  line-height: 1.6;
+}
+
+/* --- 资料卡片 --- */
+.resource-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 6px;
+}
+
+.resource-card p {
+  font-size: 0.88rem;
+  color: #777;
+  margin-bottom: 14px;
+}
+
+.resource-card .category-label {
+  display: inline-block;
+  font-size: 0.75rem;
+  background: #f0ebe4;
+  color: #8b7355;
+  padding: 3px 10px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+/* --- 按钮 --- */
+.btn {
+  display: inline-block;
+  padding: 10px 28px;
+  border-radius: 24px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+  text-align: center;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: #d4a574;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #c08f5c;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid #d4a574;
+  color: #d4a574;
+}
+
+.btn-outline:hover {
+  background: #d4a574;
+  color: #fff;
+}
+
+.btn-ghost {
+  background: #f5ebe0;
+  color: #8b6f4e;
+  padding: 8px 20px;
+  font-size: 0.88rem;
+}
+
+.btn-ghost:hover {
+  background: #ebd9c5;
+}
+
+/* --- 今日回声 --- */
+.echo-section {
+  background: #fff;
+  border-radius: 20px;
+  padding: 36px 24px;
+  margin: 0 0 48px;
+  text-align: center;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
+}
+
+.echo-label {
+  font-size: 0.85rem;
+  color: #aaa;
+  margin-bottom: 12px;
+  letter-spacing: 2px;
+}
+
+.echo-text {
+  font-size: 1.15rem;
+  color: #5a4a3a;
+  font-style: italic;
+  line-height: 1.8;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.echo-text::before {
+  content: open-quote;
+  color: #d4a574;
+  font-size: 1.5rem;
+}
+
+.echo-text::after {
+  content: close-quote;
+  color: #d4a574;
+  font-size: 1.5rem;
+}
+
+/* --- 页脚 --- */
+.footer {
+  background: #fff;
+  padding: 32px 20px;
+  text-align: center;
+  border-top: 1px solid #f0ebe4;
+  margin-top: auto;
+}
+
+.footer .contact {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 8px;
+}
+
+.footer .contact span {
+  margin: 0 12px;
+}
+
+.footer .copyright {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+/* --- 页面头部 --- */
+.page-header {
+  text-align: center;
+  padding: 48px 20px 24px;
+}
+
+.page-header h1 {
+  font-size: 1.8rem;
+  color: #3e3e3e;
+  margin-bottom: 8px;
+}
+
+.page-header p {
+  color: #888;
+  font-size: 1rem;
+}
+
+/* --- 案例详情页 --- */
+.article-detail {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 20px 48px;
+}
+
+.article-detail h1 {
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.article-detail .article-meta {
+  font-size: 0.85rem;
+  color: #aaa;
+  margin-bottom: 24px;
+}
+
+.article-detail .article-body p {
+  margin-bottom: 16px;
+  font-size: 1rem;
+  line-height: 1.9;
+  color: #4a4a4a;
+}
+
+.back-link {
+  display: inline-block;
+  color: #d4a574;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: #b08050;
+}
+
+
+
+/* --- 案例列表页筛选 --- */
+.category-filter {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.category-filter button {
+  background: #fff;
+  border: 1px solid #e0d5c5;
+  color: #777;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.category-filter button:hover,
+.category-filter button.active {
+  background: #d4a574;
+  border-color: #d4a574;
+  color: #fff;
+}
+
+/* --- 资料分类标签栏 --- */
+.resource-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 36px;
+}
+
+.resource-tabs button {
+  background: #fff;
+  border: 1px solid #e0d5c5;
+  color: #777;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.resource-tabs button:hover,
+.resource-tabs button.active {
+  background: #d4a574;
+  border-color: #d4a574;
+  color: #fff;
+}
+
+/* --- 响应式 --- */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #fff;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    transform: translateY(-100%);
+    transition: transform 0.35s ease;
+    z-index: 100;
+  }
+
+  .nav-links.open {
+    transform: translateY(0);
+  }
+
+  .nav-links a {
+    font-size: 1.15rem;
+  }
+
+  .hero {
+    padding: 44px 20px 32px;
+  }
+
+  .hero h1 {
+    font-size: 1.5rem;
+  }
+
+  .hero .subtitle {
+    font-size: 1rem;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+  }
+
+  .echo-text {
+    font-size: 1.05rem;
+  }
+
+  .page-header h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
