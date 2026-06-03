@@ -18,12 +18,12 @@ jobs:
 
       - name: 安装 ossutil
         run: |
-          curl -sL https://gosspublic.alicdn.com/ossutil/1.7.19/ossutil64 -o ossutil
+          curl -fsSL https://github.com/aliyun/ossutil/releases/download/v2.0.4/ossutil-v2.0.4-linux-amd64.zip -o ossutil.zip
+          unzip -q ossutil.zip
           chmod +x ossutil
           sudo mv ossutil /usr/local/bin/
-          ossutil --version
 
-      - name: 验证密钥和 Bucket 连通性
+      - name: 验证连通性
         run: |
           ossutil ls oss://shiveren-hk \
             --endpoint oss-cn-hongkong.aliyuncs.com \
