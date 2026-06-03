@@ -286,6 +286,13 @@ img {
   font-size: 0.88rem;
 }
 
+
+/* --- 禁用按钮（资料未上线时） --- */
+.btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
 .btn-ghost:hover {
   background: #ebd9c5;
 }

@@ -17,6 +17,7 @@ backend:
 media_folder: "assets/images"
 public_folder: "/assets/images"
 
+
 # 站点地址（← 替换为你的域名）
 site_url: https://shiyeren.top
 display_url: https://shiyeren.top
