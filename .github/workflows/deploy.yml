@@ -8,7 +8,6 @@ name: 部署到阿里云 OSS
 on:
   push:
     branches: [ "main" ]
-  # 允许手动触发
   workflow_dispatch:
 
 jobs:
@@ -19,13 +18,16 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 安装 ossutil
-        uses: manyuanrong/setup-ossutil@v3
-        with:
-          # ↓ 替换为你的 OSS 地域节点
-          # 例如 oss-cn-hangzhou.aliyuncs.com
-          endpoint: oss-cn-hongkong.aliyuncs.com
-          access-key-id: ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_ID }}
-          access-key-secret: ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_SECRET }}
+        run: |
+          wget -q https://gosspublic.alicdn.com/ossutil/1.7.19/ossutil64 -O ossutil
+          chmod +x ossutil
+          sudo mv ossutil /usr/local/bin/
+
+      - name: 配置 ossutil
+        run: |
+          ossutil config --endpoint oss-cn-hongkong.aliyuncs.com \
+            --access-key-id ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_ID }} \
+            --access-key-secret ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_SECRET }}
 
       - name: 同步文件到 OSS
         run: |
