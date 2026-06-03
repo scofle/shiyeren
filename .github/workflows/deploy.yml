@@ -16,26 +16,24 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 安装 ossutil
+      - name: 安装 ossutil（动态获取最新版）
         run: |
-          curl -fsSL https://github.com/aliyun/ossutil/releases/download/v2.0.4/ossutil-v2.0.4-linux-amd64.zip -o ossutil.zip
-          unzip -q ossutil.zip
+          URL=$(curl -s https://api.github.com/repos/aliyun/ossutil/releases/latest | grep browser_download_url | grep linux | grep amd64 | cut -d'"' -f4 | head -1)
+          if [ -z "$URL" ]; then URL="https://gosspublic.alicdn.com/ossutil/1.7.19/ossutil64"; fi
+          echo "Downloading $URL"
+          curl -fsSL "$URL" -o ossutil
           chmod +x ossutil
           sudo mv ossutil /usr/local/bin/
 
-      - name: 验证连通性
-        run: |
-          ossutil ls oss://shiveren-hk \
-            --endpoint oss-cn-hongkong.aliyuncs.com \
-            --access-key-id ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_ID }} \
-            --access-key-secret ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_SECRET }}
-
       - name: 同步文件到 OSS
+        env:
+          ALIBABA_CLOUD_ACCESS_KEY_ID: ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_ID }}
+          ALIBABA_CLOUD_ACCESS_KEY_SECRET: ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_SECRET }}
         run: |
           ossutil sync . oss://shiveren-hk \
             --endpoint oss-cn-hongkong.aliyuncs.com \
-            --access-key-id ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_ID }} \
-            --access-key-secret ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_SECRET }} \
+            --access-key-id "$ALIBABA_CLOUD_ACCESS_KEY_ID" \
+            --access-key-secret "$ALIBABA_CLOUD_ACCESS_KEY_SECRET" \
             --delete \
             --exclude ".git/*" \
             --exclude ".github/*" \
