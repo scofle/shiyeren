@@ -4,3 +4,6 @@ package-lock.json
 *.log
 data/
 .DS_Store
+
+# 源文件（不上传 OSS）
+assets/files/
