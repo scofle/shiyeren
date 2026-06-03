@@ -23,13 +23,13 @@ jobs:
         with:
           # ↓ 替换为你的 OSS 地域节点
           # 例如 oss-cn-hangzhou.aliyuncs.com
-          endpoint: oss-cn-REGION.aliyuncs.com
+          endpoint: oss-cn-hongkong.aliyuncs.com
           access-key-id: ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_ID }}
           access-key-secret: ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_SECRET }}
 
       - name: 同步文件到 OSS
         run: |
-          ossutil sync . oss://YOUR-BUCKET-NAME \
+          ossutil sync . oss://shiveren-hk \
             --delete \
             --exclude ".git/*" \
             --exclude ".github/*" \
