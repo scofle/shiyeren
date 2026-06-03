@@ -1,6 +1,5 @@
 ﻿# ============================================================
 #  破薪阁 — GitHub Actions 自动部署到阿里云 OSS
-#  每次推送 main 分支时自动同步文件
 # ============================================================
 
 name: 部署到阿里云 OSS
@@ -19,19 +18,24 @@ jobs:
 
       - name: 安装 ossutil
         run: |
-          wget -q https://gosspublic.alicdn.com/ossutil/1.7.19/ossutil64 -O ossutil
+          curl -sL https://gosspublic.alicdn.com/ossutil/1.7.19/ossutil64 -o ossutil
           chmod +x ossutil
           sudo mv ossutil /usr/local/bin/
+          ossutil --version
 
-      - name: 配置 ossutil
+      - name: 验证密钥和 Bucket 连通性
         run: |
-          ossutil config --endpoint oss-cn-hongkong.aliyuncs.com \
+          ossutil ls oss://shiveren-hk \
+            --endpoint oss-cn-hongkong.aliyuncs.com \
             --access-key-id ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_ID }} \
             --access-key-secret ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_SECRET }}
 
       - name: 同步文件到 OSS
         run: |
           ossutil sync . oss://shiveren-hk \
+            --endpoint oss-cn-hongkong.aliyuncs.com \
+            --access-key-id ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_ID }} \
+            --access-key-secret ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_SECRET }} \
             --delete \
             --exclude ".git/*" \
             --exclude ".github/*" \
