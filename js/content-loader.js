@@ -25,7 +25,7 @@ const ContentLoader = (() => {
       const cases = await Promise.all(slugs.map(s => fetchJSON("content/cases/" + s + ".json")));
       return cases.sort((a, b) => (a.order || 99) - (b.order || 99));
     }
-    const known = ["xianyu", "ppt-design", "baitan-live"];
+    const known = []; // _index.json 优先
     const cases = await Promise.all(
       known.map(s => fetchJSON("content/cases/" + s + ".json").catch(() => null))
     );
