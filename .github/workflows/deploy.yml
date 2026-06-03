@@ -16,26 +16,46 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 安装 ossutil（动态获取最新版）
-        run: |
-          URL=$(curl -s https://api.github.com/repos/aliyun/ossutil/releases/latest | grep browser_download_url | grep linux | grep amd64 | cut -d'"' -f4 | head -1)
-          if [ -z "$URL" ]; then URL="https://gosspublic.alicdn.com/ossutil/1.7.19/ossutil64"; fi
-          echo "Downloading $URL"
-          curl -fsSL "$URL" -o ossutil
-          chmod +x ossutil
-          sudo mv ossutil /usr/local/bin/
-
       - name: 同步文件到 OSS
         env:
-          ALIBABA_CLOUD_ACCESS_KEY_ID: ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_ID }}
-          ALIBABA_CLOUD_ACCESS_KEY_SECRET: ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_SECRET }}
+          OSS_KEY: ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_ID }}
+          OSS_SECRET: ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_SECRET }}
         run: |
-          ossutil sync . oss://shiveren-hk \
-            --endpoint oss-cn-hongkong.aliyuncs.com \
-            --access-key-id "$ALIBABA_CLOUD_ACCESS_KEY_ID" \
-            --access-key-secret "$ALIBABA_CLOUD_ACCESS_KEY_SECRET" \
-            --delete \
-            --exclude ".git/*" \
-            --exclude ".github/*" \
-            --exclude "DEPLOY.md" \
-            --exclude ".gitignore"
+          pip install oss2 -q
+          python3 << 'PYEOF'
+          import os, oss2
+
+          auth = oss2.Auth(os.environ["OSS_KEY"], os.environ["OSS_SECRET"])
+          bucket = oss2.Bucket(auth, "oss-cn-hongkong.aliyuncs.com", "shiveren-hk")
+
+          # 获取 OSS 现有文件列表
+          existing = set()
+          for obj in oss2.ObjectIteratorV2(bucket, max_keys=1000):
+              existing.add(obj.key)
+
+          uploaded = 0
+          deleted = set(existing)
+
+          for root, dirs, files in os.walk("."):
+              # 排除目录
+              dirs[:] = [d for d in dirs if d not in (".git", ".github")]
+              if root == ".":
+                  dirs[:] = [d for d in dirs if d not in (".git", ".github")]
+              for f in files:
+                  if f in ("DEPLOY.md", ".gitignore"):
+                      continue
+                  local = os.path.join(root, f)
+                  remote = local.replace("\\", "/").lstrip("./")
+                  bucket.put_object_from_file(remote, local)
+                  deleted.discard(remote)
+                  uploaded += 1
+                  print(f"  UP {remote}")
+
+          # 删除 OSS 上多余的文件
+          for key in deleted:
+              if not key.endswith("/"):
+                  bucket.delete_object(key)
+                  print(f"  DEL {key}")
+
+          print(f"\nDone: {uploaded} uploaded, {len(deleted)} deleted")
+          PYEOF
